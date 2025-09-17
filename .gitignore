@@ -216,3 +216,7 @@ node_modules/
 *.pdf
 todo.md
 
+*.png
+*.jpg
+*.jpeg
+*.gif

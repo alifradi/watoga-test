@@ -102,7 +102,7 @@ Open `http://localhost:8000/docs` in your browser to access the interactive API 
    - Click Execute
    - **Verify**: Returns your feature with distance_m=0.0
 
-### Step 3: Automated Testing
+### Step 3: Automated Testing (on same level of app directory)
 
 ```bash
 # Run smoke tests
@@ -132,6 +132,18 @@ tests/test_unit.py::test_get_feature_returns_none_for_nonexistent PASSED
    - Database: `appdb`
    - Username: `postgres`
    - Password: `postgres`
+   
+![pgAdmin Login](images/pwd.png)
+*pgAdmin login interface*
+
+![pgAdmin Connection](images/regis1.png)
+*Database connection setup*
+
+![pgAdmin Connection](images/regis2.png)
+*Database connection setup*
+
+![pgAdmin tables](images/yables.png)
+*Checking tables*
 
 #### Database State After Each Step
 
@@ -179,6 +191,7 @@ WHERE ST_DWithin(f.geom, ST_SetSRID(ST_MakePoint(-73.5673, 45.5017), 4326)::geog
 #### Complete Validation Query
 ```sql
 -- Full validation of PostGIS functionality
+-- Corrected validation query for GIST indexes
 SELECT 
     'PostGIS Extension' as check_type,
     CASE WHEN EXISTS(SELECT 1 FROM pg_extension WHERE extname = 'postgis') 
@@ -196,8 +209,14 @@ SELECT
 UNION ALL
 SELECT 
     'GIST Indexes',
-    CASE WHEN EXISTS(SELECT 1 FROM pg_indexes WHERE tablename IN ('features', 'footprints') AND indexdef LIKE '%GIST%') 
-         THEN '✅ Created' ELSE '❌ Missing' END
+    CASE WHEN EXISTS(
+        SELECT 1 FROM pg_class t
+        JOIN pg_index i ON t.oid = i.indrelid
+        JOIN pg_class idx ON idx.oid = i.indexrelid
+        JOIN pg_am am ON am.oid = idx.relam
+        WHERE t.relname IN ('features', 'footprints') 
+        AND am.amname = 'gist'
+    ) THEN '✅ Created' ELSE '❌ Missing' END
 UNION ALL
 SELECT 
     'Processed Features',
