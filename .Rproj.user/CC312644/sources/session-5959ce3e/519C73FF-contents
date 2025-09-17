@@ -216,7 +216,8 @@ node_modules/
 *.pdf
 todo.md
 
-*.png
-*.jpg
-*.jpeg
-*.gif
+# Image files are now tracked for documentation
+# *.png
+# *.jpg
+# *.jpeg
+# *.gif
