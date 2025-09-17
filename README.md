@@ -226,6 +226,20 @@ SELECT
 - **Testing**: Comprehensive test suite with smoke tests and unit tests
 - **Deployment**: Docker Compose for easy local development and testing
 
+## Key Design Tradeoffs
+
+### **Error Handling & Reliability**
+- **Basic Error Handling**: Simple try/catch with rollback approach fits 3-5 hour timebox while ensuring data consistency, trading comprehensive error management for simplicity
+- **No Retry Mechanism**: Single attempt processing for explicit control, trading automatic resilience for predictable behavior
+
+### **Schema Design**
+- **Separate Tables vs Single Table**: Split features and footprints for clean separation of concerns, trading simpler queries for better data modeling and flexibility (features can exist without processed buffers)
+- **Normalized Design**: Requires JOINs but prevents data duplication and maintains referential integrity
+
+### **Query Implementation Strategy**
+- **Raw SQL vs ORM**: Used hybrid approach - ORM for basic CRUD operations, raw SQL for complex PostGIS spatial functions, trading some type safety for optimal performance and direct PostGIS access
+- **Manual Processing**: Two-step create→process workflow provides explicit error control vs automatic background processing
+
 ## Key Features Implemented
 
 - ✅ **PostGIS Integration**: All spatial functions working correctly
