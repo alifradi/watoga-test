@@ -133,17 +133,11 @@ tests/test_unit.py::test_get_feature_returns_none_for_nonexistent PASSED
    - Username: `postgres`
    - Password: `postgres`
    
-![pgAdmin Login](images/pwd.png)
-*pgAdmin login interface*
 
-![pgAdmin Connection](images/regis1.png)
-*Database connection setup*
 
 ![pgAdmin Connection](images/regis2.png)
 *Database connection setup*
 
-![pgAdmin tables](images/tables.png)
-*Checking tables*
 
 #### Database State After Each Step
 
